@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
-import aroundtheworld from '../assets/aroundtheworldnobackground.jpeg'
+import aroundtheworld from '../../public/aroundtheworldnobackground.jpeg'
 import Logo from '../components/Logo'
 import StorySnippet from '../components/StorySnippet'
 
