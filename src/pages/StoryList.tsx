@@ -15,8 +15,8 @@ const StoryList: React.FC = () => {
 
   return (
     <Box className="bg-cream-100 min-h-screen p-8">
-      <h1 className="text-5xl font-bold mb-6 text-center text-primary font-nunito">
-        Explore Exciting Stories!
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-center text-[#5D4037] font-nunito leading-tight">
+        Explore exciting stories!
       </h1>
       <Box className="mb-8 relative w-full max-w-lg mx-auto">
         <InputGroup size="lg">
