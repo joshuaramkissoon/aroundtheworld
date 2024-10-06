@@ -1,11 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
+
 interface Story {
   id: string
   title: string
   content: string
   isFavorite: boolean
-  thumbnail_url: string // Add this line
+  thumbnail_url: string
+  story_metadata: {
+    country: string
+  }
 }
 
 interface StoryContextType {
@@ -49,6 +53,7 @@ export const StoryProvider: React.FC<StoryProviderProps> = ({ children }) => {
         isFavorite: false,
         thumbnail_url: story.thumbnail_url || '' // Add this line
       }))
+      console.log(storiesWithFavorites)
       setStories(storiesWithFavorites)
     } catch (error) {
       console.error('Error fetching stories:', error)

@@ -1,31 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Globe } from 'lucide-react';
 import { useStories } from '../context/StoryContext';
 import ReadingTimePill from '../components/ReadingTimePill';
-import { Input, InputGroup, InputLeftElement, Box } from '@chakra-ui/react';
+import { Input, InputGroup, InputLeftElement, Box, Button, Flex, Text } from '@chakra-ui/react';
+import { FaGlobeAmericas } from "react-icons/fa";
 
 const StoryList: React.FC = () => {
   const { stories } = useStories();
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredStories = stories.filter((story) =>
-    story.title.toLowerCase().includes(searchTerm.toLowerCase())
+    story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (story.story_metadata?.country?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Box className="bg-cream-100 min-h-screen p-8">
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-center text-[#5D4037] font-nunito leading-tight">
         Start exploring!
       </h1>
-      <Box className="mb-8 relative w-full max-w-lg mx-auto">
-        <InputGroup size="lg">
+      <Box className="mb-8 relative w-full max-w-lg mx-auto flex items-center">
+        <InputGroup size="lg" className="flex-grow mr-4">
           <InputLeftElement pointerEvents="none">
             <Search className="text-primary-light" size={20} />
           </InputLeftElement>
           <Input
             type="text"
-            placeholder="Where is your next adventure?"
+            placeholder="Where's your next adventure?"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             borderRadius="full"
@@ -49,9 +55,15 @@ const StoryList: React.FC = () => {
                 className="rounded-lg w-full mb-4 h-48 object-cover" 
               />
               <h2 className="text-2xl font-semibold mb-2 text-primary font-poppins">{story.title}</h2>
-              <Box className="flex justify-between items-center mt-auto">
+              <Flex justifyContent="space-between" alignItems="center" mt="auto">
+              {story.story_metadata && story.story_metadata.country && (
+                  <Flex alignItems="center" className="text-sm text-gray-600">
+                    <FaGlobeAmericas className="mr-1 text-orange-500" />
+                    <Text fontWeight="semibold" color="orange.500">{story.story_metadata.country}</Text>
+                  </Flex>
+                )}
                 <ReadingTimePill text={story.content} />
-              </Box>
+              </Flex>
             </Box>
           </Link>
         ))}

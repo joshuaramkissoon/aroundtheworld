@@ -107,7 +107,7 @@ const StoryReader: React.FC = () => {
     fontSize: '1.25rem',
     lineHeight: '1.8',
     fontFamily: '"Comic Sans MS", "Chalkboard SE", "Arial", sans-serif',
-    padding: '2rem',
+    padding: '1rem', // Reduced from 2rem to 1rem
     borderRadius: '8px',
     '& h1, & h2, & h3, & h4, & h5, & h6': {
       fontFamily: '"Nunito", "Arial", sans-serif',
@@ -145,7 +145,7 @@ const StoryReader: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto shadow-md p-8 rounded-b-xl">
+    <div className="max-w-4xl mx-auto shadow-md p-4 rounded-b-xl"> {/* Reduced padding from p-8 to p-4 */}
       <div className="relative w-full pb-[75%] mb-6 overflow-hidden rounded-lg transition-shadow duration-300 hover:shadow-xl">
         <img 
           src={story.thumbnail_url || 'default-thumbnail.jpg'} 
