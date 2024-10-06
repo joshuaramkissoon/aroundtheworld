@@ -13,7 +13,7 @@ const Header: React.FC = () => {
         <nav>
           <ul className="flex space-x-6">
             <li>
-              <Link to="/stories" className="flex items-center text-orange-200 hover:text-orange-500 transition duration-300">
+              <Link to="/stories" className="flex items-center text-orange-300 hover:text-orange-500 transition duration-300">
                 <Book className="mr-1" size={24} />
                 <span className="text-lg">Stories</span>
               </Link>

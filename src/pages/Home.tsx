@@ -10,7 +10,7 @@ const Home: React.FC = () => {
     {
       id: "c473218a-09dc-489f-81dc-41777592ed0d",
       title: "Izzy The Curious Scarlet Ibis",
-      content: "Izzy the Ibis stretched her wings in the early morning sunlight that filtered through the mangroves of Caroni Swamp. Her feathers, a mix of soft pink and white, ruffled in the gentle breeze. Izzy wasn't like the other adult Scarlet Ibises with their bright red plumage. She was young and still growing, but that didn't stop her from dreaming big.\n\n\"I wonder what adventures await beyond the swamp,\" Izzy mused, tapping her beak rhythmically as she often did when deep in thought. She longed to explore all of Trinidad and Tobago, but her wings weren't strong enough for long flights yet.",
+      content: "Izzy the Ibis stretched her wings in the early morning sunlight that filtered through the mangroves of Caroni Swamp. Her feathers, a mix of soft pink and white, ruffled in the gentle breeze. Izzy wasn't like the other adult Scarlet Ibises with their bright red plumage. She was young and still growing, but that didn't stop her from dreaming big.",
       mediaUrl: "https://v2.fal.media/files/b2b03f76519a43e49621e5d898662209_output.mp4",
       mediaType: "video" as const,
       country: "Trinidad and Tobago"
@@ -34,12 +34,19 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="text-center min-h-screen p-8">
+    <div className="text-center min-h-screen p-4 sm:p-8">
       <h1 className="text-5xl font-bold mb-6 text-primary">
         <span className="inline-block animate-fade-in-up">Welcome to</span>{' '}
         <Logo className="text-5xl inline-block animate-scale-in" />
       </h1>
-      <p className="text-2xl mb-8" style={{ color: '#5D4037' }}>Explore amazing stories about nature and animals from different countries!</p>
+      <img 
+        src={aroundtheworld} 
+        alt="Kids reading" 
+        className="rounded-2xl mx-auto max-w-3xl w-full h-auto mb-12"
+      />
+      <p className="text-2xl mb-8" style={{ color: '#5D4037' }}>
+        Join amazing animal pals on exciting journeys and discover the wonders of wildlife from all corners of the globe!
+      </p>
       <div className="flex justify-center space-x-4 mb-12">
         <Link
           to="/stories"
@@ -50,16 +57,10 @@ const Home: React.FC = () => {
         </Link>
       </div>
 
-      <img 
-        src={aroundtheworld} 
-        alt="Kids reading" 
-        className="rounded-2xl mx-auto max-w-3xl w-full h-auto mb-12"
-      />
-
       {/* Story preview section */}
-      <div className="max-w-4xl mx-auto p-8 rounded-lg" style={{ backgroundColor: '#FFF5E6' }}>
+      <div className="max-w-4xl mx-auto p-4 sm:p-8 rounded-lg" style={{ backgroundColor: '#FFF5E6' }}>
         <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: '"Nunito", "Arial", sans-serif', color: '#3E2723' }}>
-          Experience Immersive Stories
+          Meet Your Pals!
         </h2>
         {storySnippets.map((snippet, index) => (
           <StorySnippet key={index} {...snippet} />

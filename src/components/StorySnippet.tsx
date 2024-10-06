@@ -38,7 +38,7 @@ const StorySnippet: React.FC<StorySnippetProps> = ({ id, title, content, mediaUr
         <h3 className="text-2xl font-semibold mb-2" style={{ fontFamily: '"Nunito", "Arial", sans-serif', color: '#3E2723' }}>
           {title}
         </h3>
-        <div className="inline-block px-3 py-1 mb-4 text-sm font-semibold text-orange-800 bg-primary rounded-full">
+        <div className="inline-block px-3 py-1 mb-4 text-sm font-semibold text-purple-800 bg-purple-100 rounded-full">
           {country}
         </div>
         <div style={{ 
