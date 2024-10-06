@@ -5,6 +5,7 @@ interface Story {
   title: string
   content: string
   isFavorite: boolean
+  thumbnail_url: string // Add this line
 }
 
 interface StoryContextType {
@@ -27,7 +28,10 @@ interface StoryProviderProps {
   children: ReactNode
 }
 
-const API_BASE_URL = 'https://minions-dd1cb9c87f59.herokuapp.com'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+if (API_BASE_URL === '') {
+  throw new Error('VITE_API_BASE_URL is not set')
+}
 
 export const StoryProvider: React.FC<StoryProviderProps> = ({ children }) => {
   const [stories, setStories] = useState<Story[]>([])
@@ -42,7 +46,8 @@ export const StoryProvider: React.FC<StoryProviderProps> = ({ children }) => {
       const data = await response.json()
       const storiesWithFavorites = data.map((story: Story) => ({
         ...story,
-        isFavorite: false
+        isFavorite: false,
+        thumbnail_url: story.thumbnail_url || '' // Add this line
       }))
       setStories(storiesWithFavorites)
     } catch (error) {

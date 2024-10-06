@@ -27,9 +27,15 @@ export default {
           DEFAULT: '#495057',
           light: '#868E96',
         },
+        cream: {
+          100: '#FFF5E6', // This is a light pastel cream color
+        },
+        lightBlue: '#E3F2FD', // Add this for the background
       },
       fontFamily: {
         sans: ['Merriweather', 'serif'],
+        nunito: ['Nunito', 'sans-serif'], // Add Nunito font
+        poppins: ['Poppins', 'sans-serif'], // Add Poppins font
       },
       borderRadius: {
         'xl': '1rem',
@@ -57,6 +63,32 @@ export default {
           },
         },
       }),
+      keyframes: {
+        'fade-in-up': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          },
+        },
+        'scale-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.9)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'scale(1)'
+          },
+        }
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 0.5s ease-out',
+        'scale-in': 'scale-in 0.5s ease-out 0.3s both',
+      }
     },
   },
   plugins: [

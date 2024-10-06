@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Book } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useStories } from '../context/StoryContext';
+import ReadingTimePill from '../components/ReadingTimePill';
+import { Input, InputGroup, InputLeftElement, Box } from '@chakra-ui/react';
 
 const StoryList: React.FC = () => {
   const { stories } = useStories();
@@ -12,39 +14,49 @@ const StoryList: React.FC = () => {
   );
 
   return (
-    <div className="bg-lightBlue min-h-screen p-8">
+    <Box className="bg-cream-100 min-h-screen p-8">
       <h1 className="text-5xl font-bold mb-6 text-center text-primary font-nunito">
         Explore Exciting Stories!
       </h1>
-      <div className="mb-8 relative w-full max-w-lg mx-auto">
-        <input
-          type="text"
-          placeholder="Search stories by title..."
-          className="input pl-12 text-lg w-full rounded-full border-2 border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light shadow-md"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <Search className="absolute left-4 top-3 text-primary-light" size={24} />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <Box className="mb-8 relative w-full max-w-lg mx-auto">
+        <InputGroup size="lg">
+          <InputLeftElement pointerEvents="none">
+            <Search className="text-primary-light" size={20} />
+          </InputLeftElement>
+          <Input
+            type="text"
+            placeholder="Where is your next adventure?"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            borderRadius="full"
+            borderColor="orange.500"
+            _focus={{ borderColor: 'orange.700', boxShadow: '0 0 0 1px orange.700' }}
+          />
+        </InputGroup>
+      </Box>
+      <Box className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredStories.map((story) => (
           <Link
             key={story.id}
             to={`/story/${story.id}`}
-            className="card transform hover:scale-105 hover:shadow-lg transition duration-300 rounded-lg overflow-hidden bg-white shadow-md"
+            state={{ story }}
+            className="card transform hover:scale-105 transition duration-300 rounded-xl overflow-hidden shadow-md hover:shadow-lg border border-orange-200 bg-[#FFF5E6] flex flex-col h-full"
           >
-            <div className="p-6">
-              <img src={story.thumbnail} alt={story.title} className="rounded-lg w-full mb-4 h-48 object-cover" />
+            <Box className="p-6 flex-grow bg-[#FFF5E6]">
+              <img 
+                src={story.thumbnail_url || 'default-thumbnail.jpg'} 
+                alt={story.title} 
+                className="rounded-lg w-full mb-4 h-48 object-cover" 
+              />
               <h2 className="text-2xl font-semibold mb-2 text-primary font-poppins">{story.title}</h2>
-              <p className="text-text-light mb-4 flex items-center text-base font-poppins">
-                <Book className="mr-2" size={20} />
-                Read Story
-              </p>
-            </div>
+              <Box className="flex justify-between items-center mt-auto">
+                <ReadingTimePill text={story.content} />
+              </Box>
+            </Box>
           </Link>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

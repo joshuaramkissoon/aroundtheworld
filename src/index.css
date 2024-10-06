@@ -11,7 +11,7 @@ body {
 }
 
 .btn-primary {
-  @apply btn bg-primary text-white hover:bg-primary-dark focus:ring-primary;
+  @apply btn bg-primary text-orange-800 hover:bg-primary-dark focus:ring-primary;
 }
 
 .btn-secondary {

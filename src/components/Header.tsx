@@ -1,30 +1,29 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Globe, BookOpen, Heart } from 'lucide-react'
+import { Book, Star } from 'lucide-react'
+import Logo from './Logo'
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-primary text-white p-4 shadow-md">
+    <header className="bg-cream-100 p-4 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-3xl font-bold flex items-center">
-          <Globe className="mr-2 text-secondary" size={36} />
-          <span className="text-white">World</span>
-          <span className="text-accent">Stories</span>
+        <Link to="/" className="text-3xl flex items-center">
+          <Logo />
         </Link>
         <nav>
           <ul className="flex space-x-6">
             <li>
-              <Link to="/stories" className="flex items-center hover:text-secondary transition duration-300">
-                <BookOpen className="mr-1" size={24} />
+              <Link to="/stories" className="flex items-center text-orange-200 hover:text-orange-500 transition duration-300">
+                <Book className="mr-1" size={24} />
                 <span className="text-lg">Stories</span>
               </Link>
             </li>
-            <li>
-              <Link to="/favorites" className="flex items-center hover:text-secondary transition duration-300">
-                <Heart className="mr-1" size={24} />
+            {/* <li>
+              <Link to="/favorites" className="flex items-center text-orange-200 hover:text-orange-500 transition duration-300">
+                <Star className="mr-1" size={24} />
                 <span className="text-lg">Favorites</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>
