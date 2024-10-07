@@ -53,7 +53,6 @@ export const StoryProvider: React.FC<StoryProviderProps> = ({ children }) => {
         isFavorite: false,
         thumbnail_url: story.thumbnail_url || '' // Add this line
       }))
-      console.log(storiesWithFavorites)
       setStories(storiesWithFavorites)
     } catch (error) {
       console.error('Error fetching stories:', error)

@@ -29,3 +29,16 @@ body {
 .input {
   @apply w-full p-3 rounded-full border-2 border-primary focus:border-primary-dark focus:outline-none;
 }
+
+@keyframes carousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-carousel {
+  animation: carousel 30s linear infinite;
+}
