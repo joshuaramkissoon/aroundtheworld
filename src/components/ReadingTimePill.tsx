@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Text, HStack } from '@chakra-ui/react';
-import { FaBookOpen } from 'react-icons/fa';
+import { Box, Text } from '@chakra-ui/react';
+import { FaBook } from 'react-icons/fa';
 
 function calculateReadingTime(text: string): number {
   const wordsPerMinute = 150; // Adjusted for younger readers
@@ -17,21 +17,18 @@ const ReadingTimePill: React.FC<ReadingTimePillProps> = ({ text }) => {
 
   return (
     <Box
-      borderWidth="2px"
-      borderColor="purple.300"
-      borderRadius="full"
-      px={3}
-      py={1}
-      bg="purple.100"
-      display="inline-flex"
+      display="flex"
       alignItems="center"
+      bg="purple.100"
+      color="purple.800"
+      px={2}
+      py={1}
+      borderRadius="full"
+      fontSize={['xs', 'sm', 'md']}
+      whiteSpace="nowrap"
     >
-      <HStack spacing={2}>
-        <FaBookOpen color="#6B46C1" />
-        <Text fontSize="sm" fontWeight="bold" color="purple.700">
-          {readingTime <= 1 ? "Quick read!" : `${readingTime} min read`}
-        </Text>
-      </HStack>
+      <FaBook style={{ marginRight: '0.5em' }} />
+      <Text>{readingTime} min read</Text>
     </Box>
   );
 }

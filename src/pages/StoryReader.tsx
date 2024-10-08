@@ -1,102 +1,72 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { Heart } from 'lucide-react';
 import { useStories } from '../context/StoryContext';
-import { AspectRatio, Box, Spinner, Center } from '@chakra-ui/react';
+import { Box, Spinner, Center, Button, VStack, HStack } from '@chakra-ui/react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import ReadingTimePill from '../components/ReadingTimePill';
-
-interface CustomVideoComponentProps {
-  children?: React.ReactNode;
-  src?: string;
-  [key: string]: any;
-}
-
-const CustomVideoComponent: React.FC<CustomVideoComponentProps> = ({ children, ...props }) => {
-  let src = props.src;
-  console.log(props);
-  console.log(src);
-
-  if (!src && children) {
-    const sourceElement = React.Children.toArray(children).find(
-      (child): child is React.ReactElement => React.isValidElement(child) && child.props && 'src' in child.props
-    );
-    if (sourceElement) {
-      src = sourceElement.props.src;
-    }
-  }
-
-  if (!src) {
-    console.warn('CustomVideoComponent: Video source is empty or undefined.');
-    return null;
-  }
-
-  return (
-    <AspectRatio maxW="640px" ratio={4 / 3} margin="1rem auto 3rem" borderRadius="md">
-      <video
-        controls
-        autoPlay
-        muted
-        playsInline
-        loop
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          borderRadius: '8px',
-        }}
-        {...props}
-      >
-        <source src={src} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </AspectRatio>
-  );
-};
-
-interface CustomImageComponentProps {
-  src: string;
-  alt: string;
-}
-
-const CustomImageComponent: React.FC<CustomImageComponentProps> = ({ src, alt }) => (
-  <img src={src} alt={alt} className="rounded-lg my-4 max-w-full h-auto" />
-);
+import ListeningTimePill from '../components/ListeningTimePill';
+import CustomVideoComponent from '../components/CustomVideoComponent';
+import CustomImageComponent from '../components/CustomImageComponent';
+import AudioPlayer from '../components/AudioPlayer';
+import { Narration } from '../types/Narration';
+import { FaHeadphones } from 'react-icons/fa';
+import { getAudioDurationEstimate } from '../utils/audioUtils';
+import { API_BASE_URL } from '../context/StoryContext';
 
 const StoryReader: React.FC = () => {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  const { toggleFavorite, fetchStory } = useStories();
+  const { fetchStory } = useStories();
   const [story, setStory] = useState(location.state?.story);
+  const [narrations, setNarrations] = useState<Narration[]>(story?.narrations || []);
+  const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState(false);
+  const [minNarrationDuration, setMinNarrationDuration] = useState<number | null>(null);
 
   useEffect(() => {
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
 
-    if (!story && id) {
+    const calculateMinNarrationDuration = async (narrations: Narration[]) => {
+      if (narrations.length > 0) {
+        const minDuration = Math.min(
+          ...(await Promise.all(
+            narrations.map(async (n: Narration) => {
+              return await getAudioDurationEstimate(n.audio_url);
+            })
+          ))
+        );
+        setMinNarrationDuration(minDuration);
+      }
+    };
+
+    if (story) {
+      calculateMinNarrationDuration(narrations);
+    } else if (id) {
       const getStory = async () => {
         try {
           const fetchedStory = await fetchStory(id);
           setStory(fetchedStory);
+          const response = await fetch(`${API_BASE_URL}/published-stories/${id}/narrations`);
+          if (response.ok) {
+            const fetchedNarrations = await response.json();
+            setNarrations(fetchedNarrations);
+            calculateMinNarrationDuration(fetchedNarrations);
+          }
         } catch (error) {
-          console.error('Error fetching story:', error);
-          // Handle error (e.g., show error message to user)
+          console.error('Error fetching story or narrations:', error);
         }
       };
       getStory();
     }
-  }, [story, id, fetchStory]);
+  }, [story, id, fetchStory, narrations]);
+
+  const handleStartListening = () => {
+    setIsAudioPlayerVisible(true);
+  };
 
   if (!story) {
     return (
       <Center height="100vh">
-        <Spinner
-          thickness="2px"
-          speed="0.65s"
-          emptyColor="gray.100"
-          color="orange.500"
-          size="xl"
-        />
+        <Spinner thickness="2px" speed="0.65s" emptyColor="gray.100" color="orange.500" size="xl" />
       </Center>
     );
   }
@@ -145,7 +115,7 @@ const StoryReader: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto shadow-md p-4 rounded-b-xl"> {/* Reduced padding from p-8 to p-4 */}
+    <div className="max-w-4xl mx-auto shadow-md p-4 rounded-b-xl">
       <div className="relative w-full pb-[75%] mb-6 overflow-hidden rounded-lg transition-shadow duration-300 hover:shadow-xl">
         <img 
           src={story.thumbnail_url || 'default-thumbnail.jpg'} 
@@ -153,18 +123,29 @@ const StoryReader: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={6}>
-        {/* <button
-          onClick={() => toggleFavorite(story.id)}
-          className={`flex items-center ${
-            story.isFavorite ? 'text-accent' : 'text-text-light'
-          } hover:text-accent transition duration-300 text-lg`}
-        >
-          <Heart className="mr-2" size={24} />
-          {story.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-        </button> */}
-        <ReadingTimePill text={story.content} />
-      </Box>
+      
+      <VStack spacing={4} align="stretch" mb={6}>
+        <HStack spacing={2} justify="flex-start" flexWrap="wrap">
+          <ReadingTimePill text={story.content} />
+          {minNarrationDuration !== null && (
+            <ListeningTimePill durationInSeconds={minNarrationDuration} />
+          )}
+        </HStack>
+        
+        {narrations.length > 0 && !isAudioPlayerVisible && (
+          <Button
+            leftIcon={<FaHeadphones />}
+            colorScheme="orange"
+            onClick={handleStartListening}
+            width="full"
+            color="orange.800"
+            fontSize={['sm', 'md']}
+          >
+            Listen to this story
+          </Button>
+        )}
+      </VStack>
+
       <div className="prose max-w-none">
         <MarkdownPreview
           source={story.content}
@@ -175,6 +156,10 @@ const StoryReader: React.FC = () => {
           }}
         />
       </div>
+
+      {isAudioPlayerVisible && narrations.length > 0 && (
+        <AudioPlayer narration={narrations[0]} title={story.title} />
+      )}
     </div>
   );
 };

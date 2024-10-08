@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { Narration } from '../types/Narration'
 
 
 interface Story {
@@ -10,6 +11,7 @@ interface Story {
   story_metadata: {
     country: string
   }
+  narrations: Narration[]
 }
 
 interface StoryContextType {
@@ -32,7 +34,7 @@ interface StoryProviderProps {
   children: ReactNode
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 if (API_BASE_URL === '') {
   throw new Error('VITE_API_BASE_URL is not set')
 }
@@ -53,6 +55,7 @@ export const StoryProvider: React.FC<StoryProviderProps> = ({ children }) => {
         isFavorite: false,
         thumbnail_url: story.thumbnail_url || '' // Add this line
       }))
+      console.log(storiesWithFavorites)
       setStories(storiesWithFavorites)
     } catch (error) {
       console.error('Error fetching stories:', error)
