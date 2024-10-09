@@ -4,8 +4,55 @@ import { MapPin } from 'lucide-react'
 import aroundtheworld from '../../public/aroundtheworldnobackground.jpeg'
 import Logo from '../components/Logo'
 import StorySnippet from '../components/StorySnippet'
+import { useEffect, useState } from 'react'
+import CharacterCard from '../components/CharacterCard'
+import { API_BASE_URL } from '../context/StoryContext'
+
+interface Character {
+  id: string;
+  name: string;
+  image_url: string | null;
+  intro: string;
+  meta: {
+    description: string;
+    age: number;
+    country: string;
+    favorite_activity: string;
+  } | null;
+}
+
+const characterToStoryMap: Record<string, string> = {
+  'acer': '2d91534d-324f-49f4-914b-88f4971de7b7',
+  'maya': '72929f59-2f3b-41b6-8060-1da436adce79',
+  'lani': 'f16d055a-bf97-4a97-aa6f-6addbe2f857d',
+  'nia': 'f669ba07-f8e2-4a07-bcbc-931117819ec1'
+};
 
 const Home: React.FC = () => {
+  const [characters, setCharacters] = useState<Character[]>([]);
+
+  useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
+    const fetchCharacters = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/characters`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch characters');
+        }
+        const data: Character[] = await response.json();
+        // Shuffle the array and select 3 random characters
+        const shuffled = data.sort(() => 0.5 - Math.random());
+        setCharacters(shuffled.slice(0, 3));
+      } catch (error) {
+        console.error('Error fetching characters:', error);
+      }
+    };
+
+    fetchCharacters();
+  }, []);
+
   const storySnippets = [
     {
       id: "c473218a-09dc-489f-81dc-41777592ed0d",
@@ -35,32 +82,59 @@ const Home: React.FC = () => {
 
   return (
     <div className="text-center min-h-screen p-4 sm:p-8">
-      <h1 className="text-5xl font-bold mb-6 text-primary">
+      {/* <h1 className="text-5xl font-bold mb-6 text-primary">
         <span className="inline-block animate-fade-in-up">Welcome to</span>{' '}
         <Logo className="text-5xl inline-block animate-scale-in" />
-      </h1>
+      </h1> */}
       <img 
         src={aroundtheworld} 
         alt="Kids reading" 
         className="rounded-2xl mx-auto max-w-3xl w-full h-auto mb-12"
       />
-      <p className="text-2xl mb-8" style={{ color: '#5D4037' }}>
-        Join amazing animal pals on exciting journeys and discover the wonders of wildlife from all corners of the globe!
+      <h2 className="text-3xl font-bold mb-4">
+        <span className="bg-gradient-to-r from-red-300 via-red-400 via-orange-400 to-orange-600 text-transparent bg-clip-text">
+          Ready for a World of Wonder? ✨
+        </span>
+      </h2>
+      <p className="text-xl mb-8" style={{ color: '#5D4037' }}>
+        Join us on a magical journey around the world, where your imagination meets real-life wonders and cultures!
       </p>
       <div className="flex justify-center space-x-4 mb-12">
         <Link
           to="/stories"
-          className="btn-primary flex items-center text-orange-800"
+          className="btn-primary flex items-center bg-gradient-to-r from-orange-200 to-orange-400 text-white"
         >
-          <MapPin className="mr-2 text-orange-800" />
+          <MapPin className="mr-2" />
           Start Your Journey
         </Link>
+      </div>
+
+      {/* Character preview section */}
+      <div className="max-w-6xl mx-auto mt-12 p-4 sm:p-8 rounded-lg" style={{ backgroundColor: '#FFF5E6' }}>
+        <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: '"Nunito", "Arial", sans-serif', color: '#3E2723' }}>
+          Adventure awaits!
+        </h2>
+        <p className="text-2xl mb-6 text-left" style={{ color: '#5D4037' }}>
+          Click on one of your pals to see what adventures await! 🚀
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {characters.map((character) => (
+            <CharacterCard
+              key={character.id}
+              id={character.id}
+              name={character.name}
+              intro={character.intro}
+              imageUrl={character.image_url || ''}
+              storyId={characterToStoryMap[character.name.toLowerCase()] || ''}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Story preview section */}
       <div className="max-w-4xl mx-auto p-4 sm:p-8 rounded-lg" style={{ backgroundColor: '#FFF5E6' }}>
         <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: '"Nunito", "Arial", sans-serif', color: '#3E2723' }}>
-          Meet Your Pals!
+          Meet our furry (and feathery) friends
         </h2>
         {storySnippets.map((snippet, index) => (
           <StorySnippet key={index} {...snippet} />

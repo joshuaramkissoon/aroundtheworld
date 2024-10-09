@@ -7,7 +7,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ className = '' }) => {
   return (
     <span className={`font-bold ${className}`}>
-      <span className="bg-gradient-to-r from-blue-200 via-orange-200 to-purple-200 text-transparent bg-clip-text">
+      <span className="bg-gradient-to-r from-red-300 via-red-400 via orange-400 to-orange-600 text-transparent bg-clip-text">
         World Adventures
       </span>
     </span>
