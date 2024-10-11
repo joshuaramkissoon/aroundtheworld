@@ -24,7 +24,7 @@ interface Character {
 const characterToStoryMap: Record<string, string> = {
   'acer': '2d91534d-324f-49f4-914b-88f4971de7b7',
   'maya': '72929f59-2f3b-41b6-8060-1da436adce79',
-  'lani': 'f16d055a-bf97-4a97-aa6f-6addbe2f857d',
+  'lani': '38d8ec2c-6060-4635-acf3-6bd699605ac9',
   'nia': 'f669ba07-f8e2-4a07-bcbc-931117819ec1'
 };
 
